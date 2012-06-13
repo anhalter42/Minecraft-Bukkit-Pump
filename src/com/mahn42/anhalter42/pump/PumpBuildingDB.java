@@ -12,7 +12,7 @@ import org.bukkit.World;
  *
  * @author andre
  */
-class PumpBuildingDB extends BuildingDB<PumpBuilding> {
+public class PumpBuildingDB extends BuildingDB<PumpBuilding> {
     
     public PumpBuildingDB() {
         super(PumpBuilding.class);

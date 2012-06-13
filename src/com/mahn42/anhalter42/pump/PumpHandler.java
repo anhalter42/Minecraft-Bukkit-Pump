@@ -8,6 +8,7 @@ import com.mahn42.framework.Building;
 import com.mahn42.framework.BuildingDB;
 import com.mahn42.framework.BuildingHandler;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -26,7 +27,10 @@ class PumpHandler implements BuildingHandler {
 
     @Override
     public boolean breakBlock(BlockBreakEvent aEvent, Building aBuilding) {
-        return false;
+        World lWorld = aEvent.getBlock().getWorld();
+        PumpBuildingDB lDB = plugin.DBs.getDB(lWorld);
+        lDB.remove(aBuilding);
+        return true;
     }
 
     @Override
@@ -36,7 +40,20 @@ class PumpHandler implements BuildingHandler {
 
     @Override
     public boolean playerInteract(PlayerInteractEvent aEvent, Building aBuilding) {
-        return false;
+        Player lPlayer = aEvent.getPlayer();
+        World lWorld = lPlayer.getWorld();
+        boolean lFound = false;
+        PumpBuildingDB lDB = plugin.DBs.getDB(lWorld);
+        if (lDB.getBuildings(aBuilding.edge1).isEmpty()
+                && lDB.getBuildings(aBuilding.edge2).isEmpty()) {
+            PumpBuilding lPump = new PumpBuilding();
+            lPump.cloneFrom(aBuilding);
+            lPump.playerName = lPlayer.getName();
+            lDB.addRecord(lPump);
+            lPlayer.sendMessage("Building " + lPump.getName() + " found.");
+            lFound = true;
+        }
+        return lFound;
     }
 
     @Override
