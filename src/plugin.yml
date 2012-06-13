@@ -1,0 +1,6 @@
+## YAML Template.
+---
+name: Pump
+main: com.mahn42.anhalter42.pump.Pump
+version: 0.1
+depend: [MAHN42-Framework]
