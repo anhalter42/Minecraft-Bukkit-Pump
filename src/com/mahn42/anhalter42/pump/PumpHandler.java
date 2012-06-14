@@ -35,7 +35,18 @@ class PumpHandler implements BuildingHandler {
 
     @Override
     public boolean redstoneChanged(BlockRedstoneEvent aEvent, Building aBuilding) {
-        return false;
+        PumpBuilding lPump = (PumpBuilding)aBuilding;
+        boolean lFlood = aEvent.getNewCurrent() > 0;
+        if (!plugin.existsPumpTask(lPump)) {
+                //&& ((lFlood && !lPump.flooded) || (!lFlood && lPump.flooded))) {
+            PumpTask aTask = new PumpTask(plugin);
+            aTask.pump = (PumpBuilding)aBuilding;
+            aTask.flood = lFlood;
+            plugin.startPumpTask(aTask);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -43,16 +43,20 @@ public class Pump extends JavaPlugin {
         lDesc.typeName = "Pump";
         lDesc.handler = lHandler;
         lBDesc = lDesc.newBlockDescription("PipeUp");
-        lBDesc.material = Material.LAPIS_BLOCK;
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lRel = lBDesc.newRelatedTo(new Vector(0,-10, 0), "PipeDown");
         lRel.materials.add(Material.BRICK);
         lRel.minDistance = 1;
-        lRel = lBDesc.newRelatedTo(new Vector(3, 0, 0), "Pump");
+        lRel = lBDesc.newRelatedTo(new Vector(0, 10, 0), "Pump");
         lRel.materials.add(Material.BRICK);
         lBDesc = lDesc.newBlockDescription("PipeDown");
-        lBDesc.material = Material.LAPIS_BLOCK;
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc = lDesc.newBlockDescription("Pump");
-        lBDesc.material = Material.PISTON_BASE;
+        lBDesc.materials.add(Material.PISTON_BASE);
+        lRel = lBDesc.newRelatedTo(new Vector(3, 0, 0), "Switch");
+        lRel.materials.add(Material.BRICK);
+        lBDesc = lDesc.newBlockDescription("Switch");
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc.redstoneSensible = true;
         lDesc.activate();
 
@@ -60,16 +64,20 @@ public class Pump extends JavaPlugin {
         lDesc.typeName = "Pump";
         lDesc.handler = lHandler;
         lBDesc = lDesc.newBlockDescription("PipeUp");
-        lBDesc.material = Material.LAPIS_BLOCK;
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lRel = lBDesc.newRelatedTo(new Vector(0,-10, 0), "PipeDown");
         lRel.materials.add(Material.BRICK);
         lRel.minDistance = 1;
-        lRel = lBDesc.newRelatedTo(new Vector(-3, 0, 0), "Pump");
+        lRel = lBDesc.newRelatedTo(new Vector(0, 10, 0), "Pump");
         lRel.materials.add(Material.BRICK);
         lBDesc = lDesc.newBlockDescription("PipeDown");
-        lBDesc.material = Material.LAPIS_BLOCK;
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc = lDesc.newBlockDescription("Pump");
-        lBDesc.material = Material.PISTON_BASE;
+        lBDesc.materials.add(Material.PISTON_BASE);
+        lRel = lBDesc.newRelatedTo(new Vector(-3, 0, 0), "Switch");
+        lRel.materials.add(Material.BRICK);
+        lBDesc = lDesc.newBlockDescription("Switch");
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc.redstoneSensible = true;
         lDesc.activate();
 
@@ -77,16 +85,20 @@ public class Pump extends JavaPlugin {
         lDesc.typeName = "Pump";
         lDesc.handler = lHandler;
         lBDesc = lDesc.newBlockDescription("PipeUp");
-        lBDesc.material = Material.LAPIS_BLOCK;
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lRel = lBDesc.newRelatedTo(new Vector(0,-10, 0), "PipeDown");
         lRel.materials.add(Material.BRICK);
         lRel.minDistance = 1;
-        lRel = lBDesc.newRelatedTo(new Vector(0, 0, 3), "Pump");
+        lRel = lBDesc.newRelatedTo(new Vector(0, 10, 0), "Pump");
         lRel.materials.add(Material.BRICK);
         lBDesc = lDesc.newBlockDescription("PipeDown");
-        lBDesc.material = Material.LAPIS_BLOCK;
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc = lDesc.newBlockDescription("Pump");
-        lBDesc.material = Material.PISTON_BASE;
+        lBDesc.materials.add(Material.PISTON_BASE);
+        lRel = lBDesc.newRelatedTo(new Vector(0, 0, 3), "Switch");
+        lRel.materials.add(Material.BRICK);
+        lBDesc = lDesc.newBlockDescription("Switch");
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc.redstoneSensible = true;
         lDesc.activate();
 
@@ -94,16 +106,20 @@ public class Pump extends JavaPlugin {
         lDesc.typeName = "Pump";
         lDesc.handler = lHandler;
         lBDesc = lDesc.newBlockDescription("PipeUp");
-        lBDesc.material = Material.LAPIS_BLOCK;
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lRel = lBDesc.newRelatedTo(new Vector(0,-10, 0), "PipeDown");
         lRel.materials.add(Material.BRICK);
         lRel.minDistance = 1;
-        lRel = lBDesc.newRelatedTo(new Vector(0, 0, -3), "Pump");
+        lRel = lBDesc.newRelatedTo(new Vector(0, 10, 0), "Pump");
         lRel.materials.add(Material.BRICK);
         lBDesc = lDesc.newBlockDescription("PipeDown");
-        lBDesc.material = Material.LAPIS_BLOCK;
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc = lDesc.newBlockDescription("Pump");
-        lBDesc.material = Material.PISTON_BASE;
+        lBDesc.materials.add(Material.PISTON_BASE);
+        lRel = lBDesc.newRelatedTo(new Vector(0, 0,-3), "Switch");
+        lRel.materials.add(Material.BRICK);
+        lBDesc = lDesc.newBlockDescription("Switch");
+        lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc.redstoneSensible = true;
         lDesc.activate();
 }
@@ -117,13 +133,13 @@ public class Pump extends JavaPlugin {
         return fPumpTasks.containsKey(aPump);
     }
     
-    public void startGateTask(PumpTask aTask) {
-        aTask.taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(this, aTask, 1, 15);
+    public void startPumpTask(PumpTask aTask) {
+        aTask.taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(this, aTask, 1, 8);
         fPumpTasks.put(aTask.pump, aTask);
         getLogger().info("start task " + new Integer(aTask.taskId));
     }
     
-    public void stopGateTask(PumpTask aTask) {
+    public void stopPumpTask(PumpTask aTask) {
         getServer().getScheduler().cancelTask(aTask.taskId);
         fPumpTasks.remove(aTask.pump);
         getLogger().info("stop task " + new Integer(aTask.taskId));
