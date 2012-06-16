@@ -7,6 +7,8 @@ package com.mahn42.anhalter42.pump;
 import com.mahn42.framework.*;
 import java.util.ArrayList;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -42,10 +44,14 @@ public class PumpTask implements Runnable {
                     init();
                     fInit = true;
                 }
-                if (flood) {
-                    flood();
+                if (pump.emergencyStop) {
+                    rollback();
                 } else {
-                    unflood();
+                    if (flood) {
+                        flood();
+                    } else {
+                        unflood();
+                    }
                 }
             } finally {
                 fInRun = false;
@@ -59,6 +65,8 @@ public class PumpTask implements Runnable {
     
     private void flood() {
         SyncBlockList lList = new SyncBlockList(pump.world);
+        Block lPump = fPump.getBlock(pump.world);
+        lList.add(fPump, lPump.getType(), (byte)(lPump.getData() | (byte)0x8), false);
         if (fSettedBlocks == 0) {
             for(BlockPosition lPos : new WorldLineWalk(fTop, fBottom)) {
                 pump.floodedBlocks.add(lPos);
@@ -72,11 +80,9 @@ public class PumpTask implements Runnable {
             for(BlockPosition lPos : lItems) {
                 Material lMat = lPos.getBlockType(pump.world);
                 if (fLiquids.contains(lMat)) {
-                    if (!lMat.equals(Material.STATIONARY_WATER)) {
-                        pump.floodedBlocks.add(lPos);
-                        lList.add(lPos, Material.STATIONARY_WATER, (byte)0, true);
-                        fSettedBlocks++;
-                    }
+                    pump.floodedBlocks.add(lPos);
+                    lList.add(lPos, Material.STATIONARY_WATER, (byte)0, true);
+                    fSettedBlocks++;
                     for(BlockPosition lNext : new BlockPositionWalkAround(lPos, BlockPositionDelta.Horizontal)) {
                         if (!fAllItems.contains(lNext)
                                 && !lItems.contains(lNext)
@@ -101,7 +107,19 @@ public class PumpTask implements Runnable {
         }
         fAllItems.addAll(fItems);
         //plugin.getLogger().info("count = " + fItems.size());
+        if (pump.emergencyStop) {
+            rollback();
+        }
         if (fSettedBlocks > maxBlocks || fItems.isEmpty()) {
+            if (fSettedBlocks > maxBlocks) {
+                Player lPlayer = plugin.getServer().getPlayer(pump.playerName);
+                if (lPlayer != null) {
+                    lPlayer.sendMessage("Pump runs out of bounds... please correct it!");
+                }
+                plugin.getLogger().info("Pump " + pump.getName() + " runs out of bounds... please correct it!");
+                rollback();
+            }
+            pump.flooded = true;
             plugin.stopPumpTask(this);
         }
     }
@@ -109,15 +127,21 @@ public class PumpTask implements Runnable {
     protected int fDummyWait = 0;
     
     private void unflood() {
+        Block lPump = fPump.getBlock(pump.world);
         if (fDummyWait > 0) {
+            plugin.framework.setTypeAndData(lPump.getLocation(), lPump.getType(), (byte)(lPump.getData() | (byte)0x8), false);
             fDummyWait--;
         } else {
             if (!pump.floodedBlocks.isEmpty()) {
                 SyncBlockList lList = new SyncBlockList(pump.world);
+                lList.add(fPump, lPump.getType(), (byte)(lPump.getData() | (byte)0x8), false);
                 ArrayList<BlockPosition> lItems = new ArrayList<BlockPosition>();
                 for(BlockPosition lPos : pump.floodedBlocks) {
                     if (lPos.y == fTop.y) {
-                        lList.add(lPos, Material.AIR, (byte)0, true);
+                        Block lBlock = lPos.getBlock(pump.world);
+                        if (fLiquids.contains(lBlock.getType())) {
+                            lList.add(lPos, Material.AIR, (byte)0, false);
+                        }
                         lItems.add(lPos);
                     }
                 }
@@ -129,7 +153,11 @@ public class PumpTask implements Runnable {
                     fDummyWait = 4;
                 }
                 lList.execute();
+                if (pump.emergencyStop) {
+                    rollback();
+                }
             } else {
+                pump.flooded = false;
                 plugin.stopPumpTask(this);
             }
         }
@@ -160,6 +188,18 @@ public class PumpTask implements Runnable {
             fTop.z--;
             fBottom.z--;
         }
+    }
+
+    private void rollback() {
+        SyncBlockList lList = new SyncBlockList(pump.world);
+        for(BlockPosition lPos : pump.floodedBlocks) {
+            Block lBlock = lPos.getBlock(pump.world);
+            if (fLiquids.contains(lBlock.getType())) {
+                lList.add(lPos, Material.AIR, (byte)0, false);
+            }
+        }
+        pump.floodedBlocks.clear();
+        lList.execute();
     }
     
 }

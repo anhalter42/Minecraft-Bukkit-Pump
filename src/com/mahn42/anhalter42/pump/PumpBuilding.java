@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class PumpBuilding extends Building {
     public boolean flooded = false;
     public ArrayList<BlockPosition> floodedBlocks = new ArrayList<BlockPosition>();
+    boolean emergencyStop = false;
     
     @Override
     protected void toCSVInternal(ArrayList aCols) {

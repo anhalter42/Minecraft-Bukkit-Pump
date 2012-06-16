@@ -136,13 +136,13 @@ public class Pump extends JavaPlugin {
     public void startPumpTask(PumpTask aTask) {
         aTask.taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(this, aTask, 1, 8);
         fPumpTasks.put(aTask.pump, aTask);
-        getLogger().info("start task " + new Integer(aTask.taskId));
+        //getLogger().info("start task " + new Integer(aTask.taskId));
     }
     
     public void stopPumpTask(PumpTask aTask) {
         getServer().getScheduler().cancelTask(aTask.taskId);
         fPumpTasks.remove(aTask.pump);
-        getLogger().info("stop task " + new Integer(aTask.taskId));
+        //getLogger().info("stop task " + new Integer(aTask.taskId));
     }
     
 }

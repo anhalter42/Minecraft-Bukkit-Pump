@@ -29,7 +29,15 @@ class PumpHandler implements BuildingHandler {
     public boolean breakBlock(BlockBreakEvent aEvent, Building aBuilding) {
         World lWorld = aEvent.getBlock().getWorld();
         PumpBuildingDB lDB = plugin.DBs.getDB(lWorld);
-        lDB.remove(aBuilding);
+        PumpBuilding lPump = (PumpBuilding)aBuilding;
+        lPump.emergencyStop = true;
+        if (!plugin.existsPumpTask(lPump)) {
+            PumpTask lTask = new PumpTask(plugin);
+            lTask.pump = lPump;
+            lTask.flood = false;
+            plugin.startPumpTask(lTask);
+        }
+        lDB.remove(lPump);
         return true;
     }
 
@@ -37,10 +45,11 @@ class PumpHandler implements BuildingHandler {
     public boolean redstoneChanged(BlockRedstoneEvent aEvent, Building aBuilding) {
         PumpBuilding lPump = (PumpBuilding)aBuilding;
         boolean lFlood = aEvent.getNewCurrent() > 0;
-        if (!plugin.existsPumpTask(lPump)) {
-                //&& ((lFlood && !lPump.flooded) || (!lFlood && lPump.flooded))) {
+        //plugin.getLogger().info("redstoneChanged " + lFlood + " Pump:" + lPump.flooded);
+        if (!plugin.existsPumpTask(lPump)//) {
+                && ((lFlood && !lPump.flooded) || (!lFlood && lPump.flooded))) {
             PumpTask aTask = new PumpTask(plugin);
-            aTask.pump = (PumpBuilding)aBuilding;
+            aTask.pump = lPump;
             aTask.flood = lFlood;
             plugin.startPumpTask(aTask);
             return true;
