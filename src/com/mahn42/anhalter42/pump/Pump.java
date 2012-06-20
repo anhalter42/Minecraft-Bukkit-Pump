@@ -36,6 +36,7 @@ public class Pump extends JavaPlugin {
         PumpHandler lHandler = new PumpHandler(this);
         
         BuildingDescription lDesc;
+        BuildingDescription lDesc2;
         BuildingDescription.BlockDescription lBDesc;
         BuildingDescription.RelatedTo lRel;
         
@@ -60,7 +61,22 @@ public class Pump extends JavaPlugin {
         lBDesc.redstoneSensible = true;
         lDesc.activate();
 
-        lDesc = framework.getBuildingDetector().newDescription("Pump.2.X");
+        lDesc2 = framework.getBuildingDetector().newDescription("Pump.2.X");
+        lDesc2.cloneFrom(lDesc);
+        lDesc2.multiply(new Vector(-1,1,1));
+        lDesc2.activate();
+
+        lDesc2 = framework.getBuildingDetector().newDescription("Pump.1.Z");
+        lDesc2.cloneFrom(lDesc);
+        lDesc2.swapXYZ(BuildingDescription.SwapType.XZ);
+        lDesc2.activate();
+
+        lDesc = lDesc2;
+        lDesc2 = framework.getBuildingDetector().newDescription("Pump.2.Z");
+        lDesc2.cloneFrom(lDesc);
+        lDesc2.multiply(new Vector(-1,1,1));
+        lDesc2.activate();
+        /*
         lDesc.typeName = "Pump";
         lDesc.handler = lHandler;
         lBDesc = lDesc.newBlockDescription("PipeUp");
@@ -122,6 +138,7 @@ public class Pump extends JavaPlugin {
         lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc.redstoneSensible = true;
         lDesc.activate();
+        */
 }
 
     @Override
