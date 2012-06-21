@@ -56,9 +56,12 @@ public class Pump extends JavaPlugin {
         lBDesc.materials.add(Material.PISTON_BASE);
         lRel = lBDesc.newRelatedTo(new Vector(3, 0, 0), "Switch");
         lRel.materials.add(Material.BRICK);
+        lRel = lBDesc.newRelatedTo("PumpSwitch", BuildingDescription.RelatedPosition.Nearby, 1);
         lBDesc = lDesc.newBlockDescription("Switch");
         lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc.redstoneSensible = true;
+        lBDesc = lDesc.newBlockDescription("PumpSwitch");
+        lBDesc.materials.add(Material.LEVER);
         lDesc.activate();
 
         lDesc2 = framework.getBuildingDetector().newDescription("Pump.2.X");
@@ -74,7 +77,7 @@ public class Pump extends JavaPlugin {
         lDesc = lDesc2;
         lDesc2 = framework.getBuildingDetector().newDescription("Pump.2.Z");
         lDesc2.cloneFrom(lDesc);
-        lDesc2.multiply(new Vector(-1,1,1));
+        lDesc2.multiply(new Vector(1,1,-1));
         lDesc2.activate();
         /*
         lDesc.typeName = "Pump";
