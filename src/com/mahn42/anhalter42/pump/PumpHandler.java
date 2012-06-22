@@ -68,7 +68,6 @@ class PumpHandler extends BuildingHandlerBase {
                 && lDB.getBuildings(aBuilding.edge2).isEmpty()) {
             PumpBuilding lPump = new PumpBuilding();
             lPump.cloneFrom(aBuilding);
-            lPump.playerName = lPlayer.getName();
             lDB.addRecord(lPump);
             lPlayer.sendMessage("Building " + lPump.getName() + " found.");
             lFound = true;

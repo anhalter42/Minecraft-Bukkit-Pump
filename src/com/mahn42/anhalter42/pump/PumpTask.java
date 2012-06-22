@@ -120,6 +120,7 @@ public class PumpTask implements Runnable {
                 rollback();
             }
             pump.flooded = true;
+            plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), false);
             plugin.stopPumpTask(this);
         }
     }
@@ -161,6 +162,7 @@ public class PumpTask implements Runnable {
                 }
             } else {
                 pump.flooded = false;
+                plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), false);
                 plugin.stopPumpTask(this);
             }
         }
@@ -201,6 +203,7 @@ public class PumpTask implements Runnable {
                 return true;
             }
         } else {
+            fDummyWait = 4;
             return true;
         }
     }
@@ -221,9 +224,18 @@ public class PumpTask implements Runnable {
                 lList.add(lPos, Material.AIR, (byte)0, false);
             }
         }
+        Block lSwitchPump = fSwitchPump.getBlock(pump.world);
+        lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), false);
+        lList.execute();
+        lList = new SyncBlockList(pump.world);
+        for(BlockPosition lPos : pump.floodedBlocks) {
+            Block lBlock = lPos.getBlock(pump.world);
+            if (fLiquids.contains(lBlock.getType())) {
+                lList.add(lPos, Material.AIR, (byte)0, true);
+            }
+        }
+        lList.execute();
         pump.floodedBlocks.clear();
-        lList.execute();
-        lList.execute();
     }
     
     private boolean check() {

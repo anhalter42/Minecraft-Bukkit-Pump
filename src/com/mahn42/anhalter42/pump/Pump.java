@@ -36,11 +36,10 @@ public class Pump extends JavaPlugin {
         PumpHandler lHandler = new PumpHandler(this);
         
         BuildingDescription lDesc;
-        BuildingDescription lDesc2;
         BuildingDescription.BlockDescription lBDesc;
         BuildingDescription.RelatedTo lRel;
         
-        lDesc = framework.getBuildingDetector().newDescription("Pump.1.X");
+        lDesc = framework.getBuildingDetector().newDescription("Pump");
         lDesc.typeName = "Pump";
         lDesc.handler = lHandler;
         lBDesc = lDesc.newBlockDescription("PipeUp");
@@ -64,6 +63,8 @@ public class Pump extends JavaPlugin {
         lBDesc.materials.add(Material.LEVER);
         lDesc.activate();
 
+        lDesc.createAndActivateXZ();
+        /*
         lDesc2 = framework.getBuildingDetector().newDescription("Pump.2.X");
         lDesc2.cloneFrom(lDesc);
         lDesc2.multiply(new Vector(-1,1,1));
@@ -79,70 +80,8 @@ public class Pump extends JavaPlugin {
         lDesc2.cloneFrom(lDesc);
         lDesc2.multiply(new Vector(1,1,-1));
         lDesc2.activate();
-        /*
-        lDesc.typeName = "Pump";
-        lDesc.handler = lHandler;
-        lBDesc = lDesc.newBlockDescription("PipeUp");
-        lBDesc.materials.add(Material.LAPIS_BLOCK);
-        lRel = lBDesc.newRelatedTo(new Vector(0,-10, 0), "PipeDown");
-        lRel.materials.add(Material.BRICK);
-        lRel.minDistance = 1;
-        lRel = lBDesc.newRelatedTo(new Vector(0, 10, 0), "Pump");
-        lRel.materials.add(Material.BRICK);
-        lBDesc = lDesc.newBlockDescription("PipeDown");
-        lBDesc.materials.add(Material.LAPIS_BLOCK);
-        lBDesc = lDesc.newBlockDescription("Pump");
-        lBDesc.materials.add(Material.PISTON_BASE);
-        lRel = lBDesc.newRelatedTo(new Vector(-3, 0, 0), "Switch");
-        lRel.materials.add(Material.BRICK);
-        lBDesc = lDesc.newBlockDescription("Switch");
-        lBDesc.materials.add(Material.LAPIS_BLOCK);
-        lBDesc.redstoneSensible = true;
-        lDesc.activate();
-
-        lDesc = framework.getBuildingDetector().newDescription("Pump.1.Z");
-        lDesc.typeName = "Pump";
-        lDesc.handler = lHandler;
-        lBDesc = lDesc.newBlockDescription("PipeUp");
-        lBDesc.materials.add(Material.LAPIS_BLOCK);
-        lRel = lBDesc.newRelatedTo(new Vector(0,-10, 0), "PipeDown");
-        lRel.materials.add(Material.BRICK);
-        lRel.minDistance = 1;
-        lRel = lBDesc.newRelatedTo(new Vector(0, 10, 0), "Pump");
-        lRel.materials.add(Material.BRICK);
-        lBDesc = lDesc.newBlockDescription("PipeDown");
-        lBDesc.materials.add(Material.LAPIS_BLOCK);
-        lBDesc = lDesc.newBlockDescription("Pump");
-        lBDesc.materials.add(Material.PISTON_BASE);
-        lRel = lBDesc.newRelatedTo(new Vector(0, 0, 3), "Switch");
-        lRel.materials.add(Material.BRICK);
-        lBDesc = lDesc.newBlockDescription("Switch");
-        lBDesc.materials.add(Material.LAPIS_BLOCK);
-        lBDesc.redstoneSensible = true;
-        lDesc.activate();
-
-        lDesc = framework.getBuildingDetector().newDescription("Pump.2.Z");
-        lDesc.typeName = "Pump";
-        lDesc.handler = lHandler;
-        lBDesc = lDesc.newBlockDescription("PipeUp");
-        lBDesc.materials.add(Material.LAPIS_BLOCK);
-        lRel = lBDesc.newRelatedTo(new Vector(0,-10, 0), "PipeDown");
-        lRel.materials.add(Material.BRICK);
-        lRel.minDistance = 1;
-        lRel = lBDesc.newRelatedTo(new Vector(0, 10, 0), "Pump");
-        lRel.materials.add(Material.BRICK);
-        lBDesc = lDesc.newBlockDescription("PipeDown");
-        lBDesc.materials.add(Material.LAPIS_BLOCK);
-        lBDesc = lDesc.newBlockDescription("Pump");
-        lBDesc.materials.add(Material.PISTON_BASE);
-        lRel = lBDesc.newRelatedTo(new Vector(0, 0,-3), "Switch");
-        lRel.materials.add(Material.BRICK);
-        lBDesc = lDesc.newBlockDescription("Switch");
-        lBDesc.materials.add(Material.LAPIS_BLOCK);
-        lBDesc.redstoneSensible = true;
-        lDesc.activate();
         */
-}
+    }
 
     @Override
     public void onDisable() { 
