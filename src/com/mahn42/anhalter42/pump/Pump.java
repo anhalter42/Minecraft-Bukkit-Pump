@@ -61,7 +61,6 @@ public class Pump extends JavaPlugin {
         lBDesc.redstoneSensible = true;
         lBDesc = lDesc.newBlockDescription("PumpSwitch");
         lBDesc.materials.add(Material.LEVER);
-        lDesc.activate();
 
         lDesc.createAndActivateXZ();
         /*
