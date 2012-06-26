@@ -70,7 +70,7 @@ public class PumpTask implements Runnable {
         //Block lPump = fPump.getBlock(pump.world);
         //lList.add(fPump, lPump.getType(), (byte)(lPump.getData() | (byte)0x8), false);
         Block lSwitchPump = fSwitchPump.getBlock(pump.world);
-        lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), false);
+        lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
         if (fSettedBlocks == 0) {
             for(BlockPosition lPos : new WorldLineWalk(fTop, fBottom)) {
                 pump.floodedBlocks.add(lPos);
@@ -120,7 +120,7 @@ public class PumpTask implements Runnable {
                 rollback();
             }
             pump.flooded = true;
-            plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), false);
+            plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), true);
             plugin.stopPumpTask(this);
         }
     }
@@ -132,13 +132,13 @@ public class PumpTask implements Runnable {
         Block lSwitchPump = fSwitchPump.getBlock(pump.world);
         if (fDummyWait > 0) {
             //plugin.framework.setTypeAndData(lPump.getLocation(), Material.PISTON_BASE /*lPump.getType()*/, (byte)(lPump.getData() | (byte)0x8), false);
-            plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), false);
+            plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
             fDummyWait--;
         } else {
             if (!pump.floodedBlocks.isEmpty()) {
                 SyncBlockList lList = new SyncBlockList(pump.world);
                 //lList.add(fPump, Material.PISTON_BASE /*lPump.getType()*/, (byte)(lPump.getData() | (byte)0x8), false);
-                lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), false);
+                lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
                 ArrayList<BlockPosition> lItems = new ArrayList<BlockPosition>();
                 for(BlockPosition lPos : pump.floodedBlocks) {
                     if (lPos.y == fTop.y) {
@@ -162,7 +162,7 @@ public class PumpTask implements Runnable {
                 }
             } else {
                 pump.flooded = false;
-                plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), false);
+                plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), true);
                 plugin.stopPumpTask(this);
             }
         }
@@ -225,7 +225,7 @@ public class PumpTask implements Runnable {
             }
         }
         Block lSwitchPump = fSwitchPump.getBlock(pump.world);
-        lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), false);
+        lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), true);
         lList.execute();
         lList = new SyncBlockList(pump.world);
         for(BlockPosition lPos : pump.floodedBlocks) {
