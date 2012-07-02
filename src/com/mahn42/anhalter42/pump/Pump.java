@@ -44,6 +44,7 @@ public class Pump extends JavaPlugin {
         lDesc.handler = lHandler;
         lBDesc = lDesc.newBlockDescription("PipeUp");
         lBDesc.materials.add(Material.LAPIS_BLOCK);
+        lBDesc.detectSensible = true;
         lRel = lBDesc.newRelatedTo(new Vector(0,-10, 0), "PipeDown");
         lRel.materials.add(Material.BRICK);
         lRel.minDistance = 1;
