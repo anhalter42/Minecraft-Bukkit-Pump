@@ -19,7 +19,7 @@ public class PumpTask implements Runnable {
     public Pump plugin;
     public PumpBuilding pump;
     public int taskId;
-    public int maxBlocks = 10000;
+    public int maxBlocks = 42000;
     
     public boolean flood = false;
     
