@@ -65,12 +65,19 @@ public class PumpTask implements Runnable {
     protected ArrayList<BlockPosition> fItems;
     protected ArrayList<BlockPosition> fAllItems;
     
+    protected int fPumpDelay = 5;
+    
     private void flood() {
         SyncBlockList lList = new SyncBlockList(pump.world);
         //Block lPump = fPump.getBlock(pump.world);
         //lList.add(fPump, lPump.getType(), (byte)(lPump.getData() | (byte)0x8), false);
         Block lSwitchPump = fSwitchPump.getBlock(pump.world);
-        lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
+        if (fPumpDelay > 0) {
+            fPumpDelay--;
+        } else {
+            lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
+            fPumpDelay = 5;
+        }
         if (fSettedBlocks == 0) {
             for(BlockPosition lPos : new WorldLineWalk(fTop, fBottom)) {
                 pump.floodedBlocks.add(lPos);
@@ -119,6 +126,7 @@ public class PumpTask implements Runnable {
                 runsOut();
                 rollback();
             }
+            plugin.getLogger().info("Pump BlockCount:" + fSettedBlocks);
             pump.flooded = true;
             plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() & (byte)0xF7), true);
             plugin.stopPumpTask(this);
@@ -176,6 +184,27 @@ public class PumpTask implements Runnable {
         fLiquids.add(Material.AIR);
         fLiquids.add(Material.WATER);
         fLiquids.add(Material.STATIONARY_WATER);
+        fLiquids.add(Material.REDSTONE_WIRE);
+        fLiquids.add(Material.REDSTONE_TORCH_ON);
+        fLiquids.add(Material.REDSTONE_TORCH_OFF);
+        fLiquids.add(Material.TORCH);
+        fLiquids.add(Material.CACTUS);
+        fLiquids.add(Material.DEAD_BUSH);
+        fLiquids.add(Material.DETECTOR_RAIL);
+        fLiquids.add(Material.GRASS);
+        fLiquids.add(Material.RAILS);
+        fLiquids.add(Material.SAPLING);
+        fLiquids.add(Material.VINE);
+        fLiquids.add(Material.WHEAT);
+        fLiquids.add(Material.SEEDS);
+        fLiquids.add(Material.SUGAR_CANE_BLOCK);
+        fLiquids.add(Material.WEB);
+        fLiquids.add(Material.WATER_LILY);
+        fLiquids.add(Material.getMaterial(31)); // tall grass
+        fLiquids.add(Material.getMaterial(37)); // yellow flower
+        fLiquids.add(Material.getMaterial(38)); // red flower
+        fLiquids.add(Material.getMaterial(39)); // mushroom
+        fLiquids.add(Material.getMaterial(40)); // mushroom
         fTop = pump.getBlock("PipeUp").position.clone();
         fBottom = pump.getBlock("PipeDown").position.clone();
         fPump = pump.getBlock("Pump").position.clone();
