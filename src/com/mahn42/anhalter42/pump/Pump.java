@@ -93,7 +93,7 @@ public class Pump extends JavaPlugin {
     }
     
     public void startPumpTask(PumpTask aTask) {
-        aTask.taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(this, aTask, 1, 8);
+        aTask.taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(this, aTask, 1, 4);
         fPumpTasks.put(aTask.pump, aTask);
         //getLogger().info("start task " + new Integer(aTask.taskId));
     }

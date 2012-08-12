@@ -21,15 +21,17 @@ public class PumpBuilding extends Building {
     protected void toCSVInternal(ArrayList aCols) {
         super.toCSVInternal(aCols);
         aCols.add(flooded);
-        String lValue = null;
+        boolean lFirst = true;
+        StringBuilder lBuilder = new StringBuilder();
         for(BlockPosition lPos : floodedBlocks) {
-            if (lValue == null) {
-                lValue = lPos.toCSV(",");
+            if (lFirst) {
+                lFirst = false;
             } else {
-                lValue += "|" + lPos.toCSV(",");
+                lBuilder.append("|");
             }
+            lPos.toCSV(lBuilder, ",");
         }
-        aCols.add(lValue);
+        aCols.add(lBuilder.toString());
     }
 
     @Override

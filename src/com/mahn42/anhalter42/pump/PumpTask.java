@@ -162,7 +162,7 @@ public class PumpTask implements Runnable {
                 if (fTop.y < fBottom.y) {
                     pump.floodedBlocks.clear();
                 } else {
-                    fDummyWait = 4;
+                    fDummyWait = 8;
                 }
                 lList.execute();
                 if (pump.emergencyStop) {
@@ -232,7 +232,7 @@ public class PumpTask implements Runnable {
                 return true;
             }
         } else {
-            fDummyWait = 4;
+            fDummyWait = 8;
             return true;
         }
     }
