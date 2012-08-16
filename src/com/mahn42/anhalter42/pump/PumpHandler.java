@@ -8,10 +8,7 @@ import com.mahn42.framework.Building;
 import com.mahn42.framework.BuildingDB;
 import com.mahn42.framework.BuildingHandlerBase;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
  *
@@ -26,26 +23,9 @@ class PumpHandler extends BuildingHandlerBase {
     }
 
     @Override
-    public boolean breakBlock(BlockBreakEvent aEvent, Building aBuilding) {
-        World lWorld = aEvent.getBlock().getWorld();
-        PumpBuildingDB lDB = plugin.DBs.getDB(lWorld);
-        PumpBuilding lPump = (PumpBuilding)aBuilding;
-        lPump.emergencyStop = true;
-        if (!plugin.existsPumpTask(lPump)) {
-            PumpTask lTask = new PumpTask(plugin);
-            lTask.pump = lPump;
-            lTask.flood = false;
-            plugin.startPumpTask(lTask);
-        }
-        lDB.remove(lPump);
-        return true;
-    }
-
-    @Override
     public boolean redstoneChanged(BlockRedstoneEvent aEvent, Building aBuilding) {
         PumpBuilding lPump = (PumpBuilding)aBuilding;
         boolean lFlood = aEvent.getNewCurrent() > 0;
-        //plugin.getLogger().info("redstoneChanged " + lFlood + " Pump:" + lPump.flooded);
         if (!plugin.existsPumpTask(lPump)//) {
                 && ((lFlood && !lPump.flooded) || (!lFlood && lPump.flooded))) {
             PumpTask aTask = new PumpTask(plugin);
@@ -59,20 +39,26 @@ class PumpHandler extends BuildingHandlerBase {
     }
 
     @Override
-    public boolean playerInteract(PlayerInteractEvent aEvent, Building aBuilding) {
-        Player lPlayer = aEvent.getPlayer();
-        World lWorld = lPlayer.getWorld();
-        boolean lFound = false;
-        PumpBuildingDB lDB = plugin.DBs.getDB(lWorld);
-        if (lDB.getBuildings(aBuilding.edge1).isEmpty()
-                && lDB.getBuildings(aBuilding.edge2).isEmpty()) {
-            PumpBuilding lPump = new PumpBuilding();
-            lPump.cloneFrom(aBuilding);
-            lDB.addRecord(lPump);
-            lPlayer.sendMessage("Building " + lPump.getName() + " found.");
-            lFound = true;
+    public Building insert(Building aBuilding) {
+        PumpBuildingDB lDB = (PumpBuildingDB)getDB(aBuilding.world);
+        PumpBuilding lPump = new PumpBuilding();
+        lPump.cloneFrom(aBuilding);
+        lDB.addRecord(lPump);
+        return lPump;
+    }
+
+    @Override
+    public boolean remove(Building aBuilding) {
+        PumpBuilding lPump = (PumpBuilding)aBuilding;
+        lPump.emergencyStop = true;
+        if (!plugin.existsPumpTask(lPump) && lPump.flooded) {
+            PumpTask lTask = new PumpTask(plugin);
+            lTask.pump = lPump;
+            lTask.flood = false;
+            plugin.startPumpTask(lTask);
         }
-        return lFound;
+        super.remove(aBuilding);
+        return true;
     }
 
     @Override
