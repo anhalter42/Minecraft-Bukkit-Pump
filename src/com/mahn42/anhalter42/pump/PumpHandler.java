@@ -9,6 +9,7 @@ import com.mahn42.framework.BuildingDB;
 import com.mahn42.framework.BuildingHandlerBase;
 import org.bukkit.World;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
@@ -22,6 +23,11 @@ class PumpHandler extends BuildingHandlerBase {
         plugin = aPlugin;
     }
 
+    @Override
+    public JavaPlugin getPlugin() {
+        return plugin;
+    }
+    
     @Override
     public boolean redstoneChanged(BlockRedstoneEvent aEvent, Building aBuilding) {
         PumpBuilding lPump = (PumpBuilding)aBuilding;
