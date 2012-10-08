@@ -6,6 +6,7 @@ package com.mahn42.anhalter42.pump;
 
 import com.mahn42.framework.*;
 import java.util.ArrayList;
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -66,7 +67,7 @@ public class PumpTask implements Runnable {
     protected ArrayList<BlockPosition> fItems;
     protected ArrayList<BlockPosition> fAllItems;
     
-    protected int fPumpDelay = 8;
+    protected int fPumpDelay = 4;
     
     private void flood() {
         SyncBlockList lList = new SyncBlockList(pump.world);
@@ -74,10 +75,12 @@ public class PumpTask implements Runnable {
         //lList.add(fPump, lPump.getType(), (byte)(lPump.getData() | (byte)0x8), false);
         Block lSwitchPump = fSwitchPump.getBlock(pump.world);
         if (fPumpDelay > 0) {
+            pump.world.playEffect(fPump.getLocation(pump.world), Effect.SMOKE, 5);
             fPumpDelay--;
         } else {
-            lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
-            fPumpDelay = 8;
+            plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
+            //lList.add(fSwitchPump, lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
+            fPumpDelay = 4;
         }
         if (fSettedBlocks == 0) {
             for(BlockPosition lPos : new WorldLineWalk(fTop, fBottom)) {
@@ -142,9 +145,10 @@ public class PumpTask implements Runnable {
         if (fDummyWait > 0) {
             //plugin.framework.setTypeAndData(lPump.getLocation(), Material.PISTON_BASE /*lPump.getType()*/, (byte)(lPump.getData() | (byte)0x8), false);
             if (fPumpDelay > 0) {
+                pump.world.playEffect(fPump.getLocation(pump.world), Effect.SMOKE, 5);
                 fPumpDelay--;
             } else {
-                fPumpDelay = 8;
+                fPumpDelay = 4;
                 plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
             }
             fDummyWait--;
