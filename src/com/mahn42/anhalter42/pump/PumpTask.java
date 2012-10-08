@@ -25,6 +25,7 @@ public class PumpTask implements Runnable {
     
     public PumpTask(Pump aPlugin) {
         plugin = aPlugin;
+        maxBlocks = plugin.configMaxBlocks;
     }
     
     protected boolean fInRun = false;
@@ -245,7 +246,7 @@ public class PumpTask implements Runnable {
     private void runsOut() {
         Player lPlayer = plugin.getServer().getPlayer(pump.playerName);
         if (lPlayer != null) {
-            lPlayer.sendMessage("Pump runs out of bounds... please correct it!");
+            lPlayer.sendMessage(plugin.getText(lPlayer, "&cPump %s runs out of bounds... please correct it!", pump.getName()));
         }
         plugin.getLogger().info("Pump " + pump.getName() + " runs out of bounds... please correct it!");
     }

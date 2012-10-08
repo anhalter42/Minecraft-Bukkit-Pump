@@ -9,6 +9,8 @@ import com.mahn42.framework.Framework;
 import com.mahn42.framework.WorldDBList;
 import java.util.HashMap;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
@@ -20,6 +22,8 @@ public class Pump extends JavaPlugin {
 
     public Framework framework;
     public WorldDBList<PumpBuildingDB> DBs;
+    public int configMaxBlocks = 42000;
+    public int configMaxHeight = 10;
     
     protected HashMap<PumpBuilding, PumpTask> fPumpTasks = new HashMap<PumpBuilding, PumpTask>();
 
@@ -29,6 +33,7 @@ public class Pump extends JavaPlugin {
     @Override
     public void onEnable() { 
         framework = Framework.plugin;
+        readPumpConfig();
         DBs = new WorldDBList<PumpBuildingDB>(PumpBuildingDB.class, this);
         
         framework.registerSaver(DBs);
@@ -45,10 +50,9 @@ public class Pump extends JavaPlugin {
         lBDesc = lDesc.newBlockDescription("PipeUp");
         lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc.detectSensible = true;
-        lRel = lBDesc.newRelatedTo(new Vector(0,-10, 0), "PipeDown");
+        lRel = lBDesc.newRelatedTo(new Vector(0,-configMaxHeight, 0), "PipeDown");
         lRel.materials.add(Material.BRICK);
-        //lRel.minDistance = 1;
-        lRel = lBDesc.newRelatedTo(new Vector(0, 10, 0), "Pump");
+        lRel = lBDesc.newRelatedTo(new Vector(0, configMaxHeight, 0), "Pump");
         lRel.materials.add(Material.BRICK);
         lBDesc = lDesc.newBlockDescription("PipeDown");
         lBDesc.materials.add(Material.LAPIS_BLOCK);
@@ -64,23 +68,6 @@ public class Pump extends JavaPlugin {
         lBDesc.materials.add(Material.LEVER);
 
         lDesc.createAndActivateXZ();
-        /*
-        lDesc2 = framework.getBuildingDetector().newDescription("Pump.2.X");
-        lDesc2.cloneFrom(lDesc);
-        lDesc2.multiply(new Vector(-1,1,1));
-        lDesc2.activate();
-
-        lDesc2 = framework.getBuildingDetector().newDescription("Pump.1.Z");
-        lDesc2.cloneFrom(lDesc);
-        lDesc2.swapXYZ(BuildingDescription.SwapType.XZ);
-        lDesc2.activate();
-
-        lDesc = lDesc2;
-        lDesc2 = framework.getBuildingDetector().newDescription("Pump.2.Z");
-        lDesc2.cloneFrom(lDesc);
-        lDesc2.multiply(new Vector(1,1,-1));
-        lDesc2.activate();
-        */
     }
 
     @Override
@@ -103,5 +90,22 @@ public class Pump extends JavaPlugin {
         fPumpTasks.remove(aTask.pump);
         //getLogger().info("stop task " + new Integer(aTask.taskId));
     }
+
+    private void readPumpConfig() {
+        FileConfiguration lConfig = getConfig();
+        configMaxBlocks = lConfig.getInt("Pump.maxBlocks");
+        configMaxHeight = lConfig.getInt("Pump.maxHeight");
+    }
     
+    public String getText(String aText, Object... aObjects) {
+        return getText((String)null, aText, aObjects);
+    }
+    
+    public String getText(CommandSender aPlayer, String aText, Object... aObjects) {
+        return getText(Framework.plugin.getPlayerLanguage(aPlayer.getName()), aText, aObjects);
+    }
+    
+    public String getText(String aLanguage, String aText, Object... aObjects) {
+        return Framework.plugin.getText(this, aLanguage, aText, aObjects);
+    }
 }

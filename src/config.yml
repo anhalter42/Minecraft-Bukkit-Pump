@@ -1,0 +1,5 @@
+## YAML Template.
+---
+Pump:
+  maxBlocks: 42000
+  maxHeight: 10
