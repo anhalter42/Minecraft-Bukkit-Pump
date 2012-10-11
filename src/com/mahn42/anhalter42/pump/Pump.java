@@ -25,6 +25,7 @@ public class Pump extends JavaPlugin {
     public WorldDBList<PumpBuildingDB> DBs;
     public int configMaxBlocks = 42000;
     public int configMaxHeight = 10;
+    public int configTicks = 4;
     
     protected HashMap<PumpBuilding, PumpTask> fPumpTasks = new HashMap<PumpBuilding, PumpTask>();
 
@@ -88,7 +89,7 @@ public class Pump extends JavaPlugin {
     }
     
     public void startPumpTask(PumpTask aTask) {
-        aTask.taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(this, aTask, 1, 4);
+        aTask.taskId = getServer().getScheduler().scheduleAsyncRepeatingTask(this, aTask, 1, configTicks);
         fPumpTasks.put(aTask.pump, aTask);
         //getLogger().info("start task " + new Integer(aTask.taskId));
     }
@@ -103,6 +104,7 @@ public class Pump extends JavaPlugin {
         FileConfiguration lConfig = getConfig();
         configMaxBlocks = lConfig.getInt("Pump.maxBlocks");
         configMaxHeight = lConfig.getInt("Pump.maxHeight");
+        configTicks = lConfig.getInt("Pump.ticks");
     }
     
     public String getText(String aText, Object... aObjects) {

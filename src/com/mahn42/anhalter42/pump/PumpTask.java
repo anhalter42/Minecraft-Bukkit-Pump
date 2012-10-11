@@ -206,7 +206,7 @@ public class PumpTask implements Runnable {
         fLiquids.add(Material.CACTUS);
         fLiquids.add(Material.DEAD_BUSH);
         fLiquids.add(Material.DETECTOR_RAIL);
-        fLiquids.add(Material.GRASS);
+        //fLiquids.add(Material.GRASS);
         fLiquids.add(Material.RAILS);
         fLiquids.add(Material.SAPLING);
         fLiquids.add(Material.VINE);

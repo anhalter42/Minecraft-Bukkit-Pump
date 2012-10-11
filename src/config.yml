@@ -3,3 +3,4 @@
 Pump:
   maxBlocks: 42000
   maxHeight: 10
+  ticks: 4
