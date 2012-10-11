@@ -21,6 +21,7 @@ import org.bukkit.util.Vector;
 public class Pump extends JavaPlugin {
 
     public Framework framework;
+    public static Pump plugin;
     public WorldDBList<PumpBuildingDB> DBs;
     public int configMaxBlocks = 42000;
     public int configMaxHeight = 10;
@@ -33,6 +34,7 @@ public class Pump extends JavaPlugin {
     @Override
     public void onEnable() { 
         framework = Framework.plugin;
+        plugin = this;
         readPumpConfig();
         DBs = new WorldDBList<PumpBuildingDB>(PumpBuildingDB.class, this);
         

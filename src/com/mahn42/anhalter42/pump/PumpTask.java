@@ -85,7 +85,7 @@ public class PumpTask implements Runnable {
         if (fSettedBlocks == 0) {
             for(BlockPosition lPos : new WorldLineWalk(fTop, fBottom)) {
                 pump.floodedBlocks.add(lPos);
-                lList.add(lPos, Material.STATIONARY_WATER, (byte)0, true);
+                lList.add(lPos, pump.floodMaterial, (byte)0, true);
                 fSettedBlocks++;
             }
             fItems.add(fBottom);
@@ -96,7 +96,7 @@ public class PumpTask implements Runnable {
                 Material lMat = lPos.getBlockType(pump.world);
                 if (fLiquids.contains(lMat)) {
                     pump.floodedBlocks.add(lPos);
-                    lList.add(lPos, Material.STATIONARY_WATER, (byte)0, true);
+                    lList.add(lPos, pump.floodMaterial, (byte)0, true);
                     fSettedBlocks++;
                     for(BlockPosition lNext : new BlockPositionWalkAround(lPos, BlockPositionDelta.Horizontal)) {
                         if (!fAllItems.contains(lNext)
@@ -192,8 +192,13 @@ public class PumpTask implements Runnable {
         fAllItems = new ArrayList<BlockPosition>();
         fLiquids = new ArrayList<Material>();
         fLiquids.add(Material.AIR);
-        fLiquids.add(Material.WATER);
-        fLiquids.add(Material.STATIONARY_WATER);
+        if (pump.floodMaterial.equals(Material.STATIONARY_WATER) || pump.floodMaterial.equals(Material.WATER)) {
+            fLiquids.add(Material.WATER);
+            fLiquids.add(Material.STATIONARY_WATER);
+        } else if (pump.floodMaterial.equals(Material.STATIONARY_LAVA) || pump.floodMaterial.equals(Material.LAVA)) {
+            fLiquids.add(Material.LAVA);
+            fLiquids.add(Material.STATIONARY_LAVA);
+        }
         fLiquids.add(Material.REDSTONE_WIRE);
         fLiquids.add(Material.REDSTONE_TORCH_ON);
         fLiquids.add(Material.REDSTONE_TORCH_OFF);

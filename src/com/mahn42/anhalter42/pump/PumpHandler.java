@@ -4,10 +4,14 @@
  */
 package com.mahn42.anhalter42.pump;
 
+import com.mahn42.framework.BlockPosition;
 import com.mahn42.framework.Building;
 import com.mahn42.framework.BuildingDB;
 import com.mahn42.framework.BuildingHandlerBase;
+import com.mahn42.framework.Framework;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -70,5 +74,21 @@ class PumpHandler extends BuildingHandlerBase {
     @Override
     public BuildingDB getDB(World aWorld) {
         return plugin.DBs.getDB(aWorld);
+    }
+
+    @Override
+    public void nextConfiguration(Building aBuilding, BlockPosition position, Player aPlayer) {
+        super.nextConfiguration(aBuilding, position, aPlayer);
+        if (aBuilding instanceof PumpBuilding) {
+            PumpBuilding lPump = (PumpBuilding)aBuilding;
+            if (lPump.floodMaterial.equals(Material.STATIONARY_WATER)) {
+                lPump.floodMaterial = Material.STATIONARY_LAVA;
+            } else if (lPump.floodMaterial.equals(Material.STATIONARY_LAVA)) {
+                lPump.floodMaterial = Material.STATIONARY_WATER;
+            }
+            if (aPlayer != null) {
+                aPlayer.sendMessage(Pump.plugin.getText(aPlayer, "Pump will flood with %s now.", Framework.plugin.getText(aPlayer, lPump.floodMaterial.toString())));
+            }
+        }
     }
 }
