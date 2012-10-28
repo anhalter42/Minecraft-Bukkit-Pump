@@ -50,6 +50,7 @@ public class Pump extends JavaPlugin {
         lDesc = framework.getBuildingDetector().newDescription("Pump");
         lDesc.typeName = "Pump";
         lDesc.handler = lHandler;
+        lDesc.iconName = "gear";
         lBDesc = lDesc.newBlockDescription("PipeUp");
         lBDesc.materials.add(Material.LAPIS_BLOCK);
         lBDesc.detectSensible = true;
