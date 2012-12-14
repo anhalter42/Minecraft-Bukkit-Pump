@@ -75,7 +75,14 @@ public class PumpTask implements Runnable {
         //lList.add(fPump, lPump.getType(), (byte)(lPump.getData() | (byte)0x8), false);
         Block lSwitchPump = fSwitchPump.getBlock(pump.world);
         if (fPumpDelay > 0) {
-            pump.world.playEffect(fPump.getLocation(pump.world), Effect.SMOKE, 5);
+            plugin.getServer().getScheduler().runTask(plugin, 
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        pump.world.playEffect(fPump.getLocation(pump.world), Effect.SMOKE, 5);
+                    }
+                }
+            );
             fPumpDelay--;
         } else {
             plugin.framework.setTypeAndData(lSwitchPump.getLocation(), lSwitchPump.getType(), (byte)(lSwitchPump.getData() ^ (byte)0x8), true);
@@ -145,7 +152,14 @@ public class PumpTask implements Runnable {
         if (fDummyWait > 0) {
             //plugin.framework.setTypeAndData(lPump.getLocation(), Material.PISTON_BASE /*lPump.getType()*/, (byte)(lPump.getData() | (byte)0x8), false);
             if (fPumpDelay > 0) {
-                pump.world.playEffect(fPump.getLocation(pump.world), Effect.SMOKE, 5);
+                plugin.getServer().getScheduler().runTask(plugin, 
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            pump.world.playEffect(fPump.getLocation(pump.world), Effect.SMOKE, 5);
+                        }
+                    }
+                );
                 fPumpDelay--;
             } else {
                 fPumpDelay = 4;
