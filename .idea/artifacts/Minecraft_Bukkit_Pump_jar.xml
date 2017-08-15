@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Minecraft-Bukkit-Pump:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Minecraft_Bukkit_Pump_jar</output-path>
+    <root id="archive" name="com.mahn42.anhalter42.pump.jar">
+      <element id="module-output" name="Minecraft-Bukkit-Pump" />
+    </root>
+  </artifact>
+</component>

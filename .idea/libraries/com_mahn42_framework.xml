@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="com.mahn42.framework">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../Minecraft-Bukkit-Mahn42-Framework/out/artifacts/com_mahn42_framework_jar/com.mahn42.framework.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
